@@ -1,5 +1,5 @@
 <script lang="ts">
-	import LightDarkToggle from '$components/LightDarkToggle.svelte';
+	import LightDarkToggle from '$components/light-dark-toggle.svelte';
 </script>
 
 <div class="flex preset-filled-secondary-100-900 p-4">
