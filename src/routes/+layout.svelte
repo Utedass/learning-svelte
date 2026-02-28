@@ -14,7 +14,7 @@
 <SettingsKeeper />
 <DarkModeSettings />
 
-<div class="flex flex-col w-[80%] max-w-3xl min-h-screen mx-auto">
+<div class="flex flex-col max-w-3xl min-h-screen mx-auto">
 	<nav class="sticky top-0">
 		<NavBar />
 	</nav>
