@@ -9,7 +9,7 @@
 
 @custom-variant dark (&:where([data-mode=dark], [data-mode=dark] *));
 
-sfaf* {
+asd* {
 	border: 1px solid white;
 	writing-mode: horizontal-tb;
 }
