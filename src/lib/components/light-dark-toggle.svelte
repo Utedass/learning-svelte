@@ -1,26 +1,28 @@
 <script lang="ts">
 	import { Switch } from '@skeletonlabs/skeleton-svelte';
+	import { globalSettings } from '$scripts/types/settings.svelte.ts';
 
 	let checked = $state(false);
 
 	$effect(() => {
-		const mode = localStorage.getItem('mode') || 'light';
-		checked = mode === 'dark';
+		if (globalSettings.DarkMode == 'light') {
+			checked = false;
+		} else if (globalSettings.DarkMode == 'dark') {
+			checked = true;
+		} else {
+			checked = true;
+		}
 	});
 
 	const onCheckedChange = (event: { checked: boolean }) => {
-		const mode = event.checked ? 'dark' : 'light';
-		document.documentElement.setAttribute('data-mode', mode);
-		localStorage.setItem('mode', mode);
-		checked = event.checked;
+		if (!checked) {
+			globalSettings.DarkMode = 'dark';
+		} else {
+			globalSettings.DarkMode = 'light';
+		}
+		//checked = event.checked;
 	};
 </script>
-
-<svelte:head>
-	<script>
-		document.documentElement.setAttribute('data-mode', localStorage.getItem('mode') || 'dark');
-	</script>
-</svelte:head>
 
 <Switch {checked} {onCheckedChange}>
 	<Switch.Control>

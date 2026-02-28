@@ -1,34 +1,46 @@
 <script lang="ts">
-	import { onMount } from 'svelte';
+	/*
+	For this to work properly there need to be a global-settings-state component BEFORE this dialog is used.
+	Otherwise loading initial settings wont work.
+	*/
+	import { onMount, untrack } from 'svelte';
 	import Modal from '$components/modals/empty-modal.svelte';
 	import { XIcon } from '@lucide/svelte';
-	import type { Settings, SettingsKey } from '$types/settings';
-	import { defaultSettings, settingsSchema } from '$types/settings';
+	import type { Settings, SettingsKey } from '$scripts/types/settings.svelte.ts';
+	import {
+		defaultSettings,
+		settingsSchema,
+		globalSettings,
+		globalSettingsState
+	} from '$scripts/types/settings.svelte.ts';
+
 	interface Props {
 		open: boolean;
-		settings: Settings;
-		openOnBlank: boolean;
+		openOnBlank: boolean; // If true, open the dialog if no previous settings were loaded
 	}
 
-	let { open = $bindable(), settings = $bindable(), openOnBlank = false } = $props();
+	let { open = $bindable(), openOnBlank = false } = $props();
 
 	let oldSettings: Settings = $state(defaultSettings());
 	let newSettings: Settings = $state(defaultSettings());
 
-	$inspect(oldSettings);
-	$inspect(newSettings);
-
+	// Copy the global settings on load. Also, determine if dialog should load opened.
 	onMount(() => {
-		console.log('SettingsDialog mounted');
-		// Load settings from localStorage and merge with default settings.
-		const savedSettings = localStorage.getItem('appSettings');
-		if (savedSettings) {
-			oldSettings = defaultSettings(JSON.parse(savedSettings));
-			newSettings = { ...oldSettings };
-			settings = { ...oldSettings };
-		} else if (openOnBlank) {
+		newSettings = { ...globalSettings };
+		oldSettings = { ...globalSettings };
+		if (openOnBlank && !globalSettingsState.stored) {
 			open = true;
 		}
+	});
+
+	// Update the dialogs fields if globalSettings changes, unless they carry local changes
+	$effect(() => {
+		settingsSchema.forEach((setting) => {
+			if (!untrack(() => isDirty(setting.key))) {
+				newSettings[setting.key] = globalSettings[setting.key];
+				oldSettings[setting.key] = globalSettings[setting.key];
+			}
+		});
 	});
 
 	function isDirty(key: SettingsKey) {
@@ -37,10 +49,8 @@
 	}
 
 	function applySettings() {
-		localStorage.setItem('appSettings', JSON.stringify(newSettings));
-		console.log('Saved settings: ' + JSON.stringify(newSettings));
 		oldSettings = { ...newSettings };
-		settings = { ...oldSettings };
+		Object.assign(globalSettings, newSettings);
 	}
 
 	function closeSettings() {

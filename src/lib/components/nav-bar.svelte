@@ -1,5 +1,6 @@
 <script lang="ts">
 	import LightDarkToggle from '$components/light-dark-toggle.svelte';
+	import SettingsGear from '$components/settings-gear.svelte';
 </script>
 
 <div class="flex preset-filled-secondary-100-900 p-4">
@@ -13,9 +14,9 @@
 		<a href="/getstuff">getstuff</a>
 		<a href="/404">404</a>
 	</div>
-	<div class="ml-auto">
-		<span>Dark mode </span>
+	<div class="ml-auto flex gap-4 items-center">
 		<LightDarkToggle />
+		<SettingsGear />
 	</div>
 </div>
 
