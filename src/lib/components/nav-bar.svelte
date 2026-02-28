@@ -12,6 +12,7 @@
 		<a href="/layouts1">layouts1</a>
 		<a href="/layouts2">layouts2</a>
 		<a href="/getstuff">getstuff</a>
+		<a href="/zebra">Zebra</a>
 		<a href="/404">404</a>
 	</div>
 	<div class="ml-auto flex flex-wrap-reverse gap-4 items-center">
