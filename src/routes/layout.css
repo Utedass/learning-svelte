@@ -9,7 +9,7 @@
 
 @custom-variant dark (&:where([data-mode=dark], [data-mode=dark] *));
 
-tabort* {
+asdasd* {
 	border: 1px solid white;
 	writing-mode: horizontal-tb;
 }

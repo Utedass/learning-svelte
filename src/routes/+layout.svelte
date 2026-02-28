@@ -32,20 +32,19 @@
 	.thewholepage {
 		width: 80%;
 		margin: 0 auto;
-		min-height: 400px;
+		min-height: 100vh;
+		display: flex;
+		flex-direction: column;
 	}
 	nav {
-		position: fixed;
+		position: sticky;
 		top: 0;
-		width: 80%;
 	}
 	main {
-		margin-top: 80px;
-		margin-bottom: 80px;
+		flex: 1;
 	}
 	footer {
-		position: fixed;
+		position: sticky;
 		bottom: 0;
-		width: 80%;
 	}
 </style>
