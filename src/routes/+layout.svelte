@@ -14,37 +14,16 @@
 <SettingsKeeper />
 <DarkModeSettings />
 
-<div class="thewholepage">
-	<nav>
+<div class="flex flex-col w-[80%] max-w-3xl min-h-screen mx-auto">
+	<nav class="sticky top-0">
 		<NavBar />
 	</nav>
 
-	<main>
+	<main class="flex-1">
 		{@render children()}
 	</main>
 
-	<footer>
+	<footer class="sticky bottom-0">
 		<Footer />
 	</footer>
 </div>
-
-<style>
-	.thewholepage {
-		width: 80%;
-		margin: 0 auto;
-		min-height: 100vh;
-		display: flex;
-		flex-direction: column;
-	}
-	nav {
-		position: sticky;
-		top: 0;
-	}
-	main {
-		flex: 1;
-	}
-	footer {
-		position: sticky;
-		bottom: 0;
-	}
-</style>

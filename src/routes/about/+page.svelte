@@ -21,8 +21,8 @@ Damm är saker som gått sönder över tid.
 {@render greeting('Sven')}
 
 <p class="w-50 sm:w-100 md:w-150 lg:w-200 xl:w-250">
-	Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut
-	labore et dolore magna aliqua.
+	This is expanding its box on purpose, based on browser width.<br /> Lorem ipsum dolor sit amet, consectetur
+	adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
 </p>
 
 What about this text?
