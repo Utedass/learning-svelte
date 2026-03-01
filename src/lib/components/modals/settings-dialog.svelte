@@ -6,13 +6,13 @@
 	import { onMount, untrack } from 'svelte';
 	import Modal from '$components/modals/empty-modal.svelte';
 	import { XIcon } from '@lucide/svelte';
-	import type { Settings, SettingsKey } from '$scripts/types/settings.svelte.ts';
+	import type { Settings, SettingsKey } from '$scripts/types/settings.svelte';
 	import {
 		defaultSettings,
 		settingsSchema,
 		globalSettings,
 		globalSettingsState
-	} from '$scripts/types/settings.svelte.ts';
+	} from '$scripts/types/settings.svelte';
 
 	interface Props {
 		open: boolean;
