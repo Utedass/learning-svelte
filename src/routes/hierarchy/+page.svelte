@@ -113,6 +113,7 @@
 <hr />
 
 {#if showResults}
+	Search results
 	{#each filteredProducts as p}
 		<label class="flex input preset-outlined-primary-400-600">
 			<div
@@ -126,7 +127,11 @@
 				{#if p.parent_product_id}
 					<span class="label-text">Parent</span>
 					<div class="input preset-outlined-primary-400-600">
-						<p><span></span> {productsById[p.parent_product_id].name}</p>
+						<p>
+							<span class="preset-tonal-tertiary w-fit">{p.parent_product_id}</span> - {productsById[
+								p.parent_product_id
+							].name}
+						</p>
 					</div>
 				{/if}
 			</div>
@@ -135,8 +140,8 @@
 {/if}
 
 <hr />
-Selected
 {#if showSelected}
+	Selected
 	{#each Object.entries(selectedProducts) as [key, selected]}
 		{@const p = productsById[Number(key)]}
 		{#if selected}
