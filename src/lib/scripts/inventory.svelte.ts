@@ -25,7 +25,24 @@ export async function getSomething() {
 	}
 }
 
-export const products = $state<Record<number, Product>>({});
+export const products: Product[] = $state([]);
+export const productsById = $state<Record<number, Product>>({});
+
+$effect.root(() => {
+	$effect(() => {
+		console.log('Nu kör vi för att productsById ändrats!');
+		Object.assign(products, Object.values(productsById));
+	});
+	$effect(() => {
+		console.log('Nu kör vi för att products ändrats!');
+		const productRecord: Record<number, Product> = {};
+
+		for (const p of products) {
+			productRecord[p.id] = p;
+		}
+		Object.assign(productsById, productRecord);
+	});
+});
 
 export type ProductsResponse = Product[];
 
@@ -76,7 +93,7 @@ export async function fetchProducts() {
 	myHeaders.append('GROCY-API-KEY', globalSettings.APIkey);
 
 	const params = new URLSearchParams();
-	params.append('limit', '3');
+	//params.append('limit', '3');
 
 	const requestOptions = {
 		method: 'GET',
@@ -87,14 +104,9 @@ export async function fetchProducts() {
 	try {
 		const res = await fetch(globalSettings.BaseUrl + `/objects/products?${params}`, requestOptions);
 		const list: Product[] = await res.json();
+		Object.assign(products, list);
 
-		const productRecord: Record<number, Product> = {};
-
-		for (const p of list) {
-			productRecord[p.id] = p;
-		}
-		Object.assign(products, productRecord);
-		console.log(`Retrieved ${Object.keys(productRecord).length} products`);
+		console.log(`Retrieved ${Object.keys(products).length} products`);
 	} catch (err) {
 		console.log('Something sucked.');
 	}
