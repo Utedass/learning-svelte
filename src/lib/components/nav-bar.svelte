@@ -12,6 +12,7 @@
 		<a href="/layouts1">layouts1</a>
 		<a href="/layouts2">layouts2</a>
 		<a href="/getstuff">getstuff</a>
+		<a href="/hierarchy">Grocy parents</a>
 		<a href="/zebra">Zebra</a>
 		<a href="/404">404</a>
 	</div>
