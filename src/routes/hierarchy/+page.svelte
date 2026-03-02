@@ -74,6 +74,7 @@
 		<div>
 			<span>Show result</span>
 			<input type="checkbox" bind:checked={showResults} />
+			<span>({filteredProducts.length} result{filteredProducts.length == 1 ? '' : 's'})</span>
 		</div>
 	</div>
 	<div>
@@ -103,9 +104,9 @@
 				<input type="checkbox" bind:checked={showSelected} />
 			</span>
 			<span
-				>Currently selected products: {Object.values(selectedProducts).filter((e) => {
+				>({Object.values(selectedProducts).filter((e) => {
 					return e;
-				}).length}</span>
+				}).length} selected)</span>
 		</div>
 	</div>
 </div>
