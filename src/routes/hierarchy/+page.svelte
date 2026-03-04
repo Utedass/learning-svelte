@@ -49,20 +49,17 @@
 				return e.parent_product_id == null;
 			});
 		}
-		if (filterChilds)
-		{
+		if (filterChilds) {
 			reducedList = reducedList.filter((e) => {
 				return e.parent_product_id != null;
 			});
 		}
-		if (filterChildless)
-		{
+		if (filterChildless) {
 			reducedList = reducedList.filter((e) => {
 				return !(e.id in parentRelations);
 			});
 		}
-		if (filterParents)
-		{
+		if (filterParents) {
 			reducedList = reducedList.filter((e) => {
 				return e.id in parentRelations;
 			});
@@ -88,6 +85,12 @@
 			}
 		});
 	}
+
+	// onMount function runs once the page loads
+	onMount(async () => {
+		await fetchAll();
+		findParentChildRelations();
+	});
 </script>
 
 <div>
@@ -181,15 +184,15 @@
 						</p>
 					</div>
 				{/if}
-				
+
 				{#if p.id in parentRelations}
 					<span class="label-text">Childs</span>
 					<div class="input preset-filled-secondary-100-900">
-					{#each parentRelations[p.id] as cid}
-					{@const c = productsById[cid]}
-						<p>
-							<span class="preset-tonal-tertiary w-fit">{cid}</span> - {c.name}
-						</p>
+						{#each parentRelations[p.id] as cid}
+							{@const c = productsById[cid]}
+							<p>
+								<span class="preset-tonal-tertiary w-fit">{cid}</span> - {c.name}
+							</p>
 						{/each}
 					</div>
 				{/if}
@@ -200,45 +203,44 @@
 
 <hr />
 
-
 {#if showSelected}
 	Search results
 	{#each Object.entries(selectedProducts) as [key, selected]}
-			{@const p = productsById[Number(key)]}
+		{@const p = productsById[Number(key)]}
 		{#if selected}
-		<label class="flex input preset-outlined-primary-400-600">
-			<div
-				class="flex-none p-2 border-none
+			<label class="flex input preset-outlined-primary-400-600">
+				<div
+					class="flex-none p-2 border-none
 			 preset-outlined-primary-400-600 flex place-items-center">
-				<input type="checkbox" bind:checked={selectedProducts[p.id]} />
-			</div>
-			<div class="flex-auto">
-				<p class="preset-tonal-tertiary w-fit">{p.id}</p>
-				<p>{p.name}</p>
-				{#if p.parent_product_id}
-					<span class="label-text">Parent</span>
-					<div class="input preset-filled-primary-50-950">
-						<p>
-							<span class="preset-tonal-tertiary w-fit">{p.parent_product_id}</span> - {productsById[
-								p.parent_product_id
-							].name}
-						</p>
-					</div>
-				{/if}
-				
-				{#if p.id in parentRelations}
-					<span class="label-text">Childs</span>
-					<div class="input preset-filled-secondary-100-900">
-					{#each parentRelations[p.id] as cid}
-					{@const c = productsById[cid]}
-						<p>
-							<span class="preset-tonal-tertiary w-fit">{cid}</span> - {c.name}
-						</p>
-						{/each}
-					</div>
-				{/if}
-			</div>
-		</label>
+					<input type="checkbox" bind:checked={selectedProducts[p.id]} />
+				</div>
+				<div class="flex-auto">
+					<p class="preset-tonal-tertiary w-fit">{p.id}</p>
+					<p>{p.name}</p>
+					{#if p.parent_product_id}
+						<span class="label-text">Parent</span>
+						<div class="input preset-filled-primary-50-950">
+							<p>
+								<span class="preset-tonal-tertiary w-fit">{p.parent_product_id}</span> - {productsById[
+									p.parent_product_id
+								].name}
+							</p>
+						</div>
+					{/if}
+
+					{#if p.id in parentRelations}
+						<span class="label-text">Childs</span>
+						<div class="input preset-filled-secondary-100-900">
+							{#each parentRelations[p.id] as cid}
+								{@const c = productsById[cid]}
+								<p>
+									<span class="preset-tonal-tertiary w-fit">{cid}</span> - {c.name}
+								</p>
+							{/each}
+						</div>
+					{/if}
+				</div>
+			</label>
 		{/if}
 	{/each}
 {/if}
@@ -252,28 +254,28 @@
 				<div class="flex-auto">
 					<p>{p.id}</p>
 					<p>{p.name}</p>
-				{#if p.parent_product_id}
-					<span class="label-text">Parent</span>
-					<div class="input preset-filled-primary-50-950">
-						<p>
-							<span class="preset-tonal-tertiary w-fit">{p.parent_product_id}</span> - {productsById[
-								p.parent_product_id
-							].name}
-						</p>
-					</div>
-				{/if}
-				
-				{#if p.id in parentRelations}
-					<span class="label-text">Childs</span>
-					<div class="input preset-filled-secondary-100-900">
-					{#each parentRelations[p.id] as cid}
-					{@const c = productsById[cid]}
-						<p>
-							<span class="preset-tonal-tertiary w-fit">{cid}</span> - {c.name}
-						</p>
-						{/each}
-					</div>
-				{/if}
+					{#if p.parent_product_id}
+						<span class="label-text">Parent</span>
+						<div class="input preset-filled-primary-50-950">
+							<p>
+								<span class="preset-tonal-tertiary w-fit">{p.parent_product_id}</span> - {productsById[
+									p.parent_product_id
+								].name}
+							</p>
+						</div>
+					{/if}
+
+					{#if p.id in parentRelations}
+						<span class="label-text">Childs</span>
+						<div class="input preset-filled-secondary-100-900">
+							{#each parentRelations[p.id] as cid}
+								{@const c = productsById[cid]}
+								<p>
+									<span class="preset-tonal-tertiary w-fit">{cid}</span> - {c.name}
+								</p>
+							{/each}
+						</div>
+					{/if}
 				</div>
 			</div>
 		{/if}
