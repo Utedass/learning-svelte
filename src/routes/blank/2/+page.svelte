@@ -32,7 +32,7 @@
 	}
 
 	#content {
-		height: 200vh;
+		height: 800px;
 	}
 
 	#toolbar {
@@ -40,14 +40,5 @@
 		top: 0;
 		height: 10ex;
 		transition: transform 0.4s ease;
-	}
-
-	@keyframes hide {
-		from {
-			translate: 0 0;
-		}
-		to {
-			translate: 0 -120%;
-		}
 	}
 </style>
