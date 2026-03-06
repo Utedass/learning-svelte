@@ -14,6 +14,7 @@
 		<a href="/pages/getstuff">getstuff</a>
 		<a href="/pages/hierarchy">Grocy parents</a>
 		<a href="/pages/zebra">Zebra</a>
+		<a href="/pages/media-queries">Media queries</a>
 		<a href="/pages/404">404</a>
 	</div>
 	<div class="ml-auto flex flex-wrap-reverse gap-4 items-center">
