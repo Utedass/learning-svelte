@@ -83,25 +83,27 @@
 	</header>
 	<div>
 		{#each settingsSchema as field}
-			<label class="label" onkeydown={handleEnter}>
-				<span class="label-text">{field.label}</span>
-				{#if field.type === 'checkbox'}
-					<input
-						type="checkbox"
-						class="{field.style} {isDirty(field.key) ? 'preset-tonal-warning' : ''}"
-						bind:checked={newSettings[field.key as SettingsKey]} />
-				{:else if field.type === 'string'}
-					<input
-						type={field.type}
-						class="{field.style} {isDirty(field.key) ? 'preset-tonal-warning' : ''}"
-						bind:value={newSettings[field.key as SettingsKey]} />
-				{:else if field.type === 'number'}
-					<input
-						type={field.type}
-						class="{field.style} {isDirty(field.key) ? 'preset-tonal-warning' : ''}"
-						bind:value={newSettings[field.key as SettingsKey]} />
-				{/if}
-			</label>
+			<button class="block w-1/1" onkeydown={handleEnter}>
+				<label class="label">
+					<span class="label-text">{field.label}</span>
+					{#if field.type === 'checkbox'}
+						<input
+							type="checkbox"
+							class="{field.style} {isDirty(field.key) ? 'preset-tonal-warning' : ''}"
+							bind:checked={newSettings[field.key as SettingsKey]} />
+					{:else if field.type === 'string'}
+						<input
+							type={field.type}
+							class="{field.style} {isDirty(field.key) ? 'preset-tonal-warning' : ''}"
+							bind:value={newSettings[field.key as SettingsKey]} />
+					{:else if field.type === 'number'}
+						<input
+							type={field.type}
+							class="{field.style} {isDirty(field.key) ? 'preset-tonal-warning' : ''}"
+							bind:value={newSettings[field.key as SettingsKey]} />
+					{/if}
+				</label>
+			</button>
 		{/each}
 	</div>
 	<footer class="flex justify-end gap-2">

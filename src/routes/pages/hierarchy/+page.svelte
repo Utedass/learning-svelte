@@ -28,6 +28,9 @@
 		stockEntriesById
 	} from '$scripts/inventory.svelte';
 
+	import { Listbox, useListCollection } from '@skeletonlabs/skeleton-svelte';
+	import type { Filter } from '@lucide/svelte';
+
 	let filterOrphans = $state(false);
 	let filterChilds = $state(false);
 	let filterChildless = $state(false);
@@ -41,6 +44,70 @@
 	let selectedProducts: Record<number, boolean> = $state({});
 
 	let parentRelations: Record<number, number[]> = $state({});
+
+	let resultingProducts = $state(new Set<Product>());
+
+	type FilterMode = 'ignore' | 'include' | 'require' | 'exclude';
+
+	type ProductFilter = {
+		hasParent: FilterMode;
+		isActive: FilterMode;
+		isCumulative: FilterMode;
+	};
+	let productFilter: ProductFilter = $state({
+		hasParent: 'ignore',
+		isActive: 'ignore',
+		isCumulative: 'ignore'
+	});
+
+	let filterableProps = [
+		{ key: 'hasParent', display: 'Orphaned' },
+		{ key: 'isActive', display: 'Active' },
+		{ key: 'isCumulative', display: 'Cumulative' }
+	];
+	type ProductFilterKey = (typeof filterableProps)[number]['key'];
+
+	let includeAll = $state(false);
+
+	let orphanedProducts: Set<Product> = $derived(
+		new Set<Product>(
+			products.filter((e) => {
+				return e.parent_product_id == null;
+			})
+		)
+	);
+
+	const filterModeStrings = [
+		{ value: 'ignore', display: '-' },
+		{ value: 'exclude', display: 'Exclude' },
+		{ value: 'require', display: 'Require' }
+	];
+	const collection = useListCollection({
+		items: filterModeStrings,
+		itemToString: (item) => item.display,
+		itemToValue: (item) => item.value
+	});
+
+	$effect(() => {
+		let workingSet = new Set<Product>();
+		// Either include all products, or sub-sets of them
+		if (includeAll) {
+			workingSet = new Set<Product>(products);
+		} else {
+			if (productFilter.hasParent == 'include') {
+				workingSet = workingSet.union(orphanedProducts);
+			}
+		}
+
+		if (productFilter.hasParent == 'exclude') {
+			workingSet = workingSet.difference(orphanedProducts);
+		}
+		if (productFilter.hasParent == 'require') {
+			workingSet = workingSet.intersection(orphanedProducts);
+		}
+
+		resultingProducts = workingSet;
+	});
 
 	$effect(() => {
 		let reducedList: Product[] = products;
@@ -125,6 +192,13 @@
 			<input type="checkbox" bind:checked={showResults} />
 			<span>({filteredProducts.length} result{filteredProducts.length == 1 ? '' : 's'})</span>
 		</div>
+		<div>
+			<span>Include all</span>
+			<input type="checkbox" bind:checked={includeAll} />
+		</div>
+	</div>
+	<div id="filter-area">
+		<table><tbody><tr><td>Tja!</td><td>Yo!</td></tr></tbody></table>
 	</div>
 	<div>
 		<span class="label-text">Search</span>
@@ -158,6 +232,32 @@
 				}).length} selected)</span>
 		</div>
 	</div>
+</div>
+<hr />
+<pre class="pre">
+	{JSON.stringify(productFilter)}
+</pre>
+
+<div class="flex">
+	{#each filterableProps as p}
+		<Listbox
+			{collection}
+			value={productFilter[p.key]}
+			onValueChange={(details) => {
+				console.log(JSON.stringify(details));
+				productFilter[p.key] = details.value;
+			}}>
+			<Listbox.Label>{p.display}</Listbox.Label>
+			<Listbox.Content>
+				{#each collection.items as item (item.display)}
+					<Listbox.Item {item}>
+						<Listbox.ItemText>{item.display}</Listbox.ItemText>
+						<Listbox.ItemIndicator />
+					</Listbox.Item>
+				{/each}
+			</Listbox.Content>
+		</Listbox>
+	{/each}
 </div>
 
 <hr />
@@ -203,8 +303,47 @@
 
 <hr />
 
+<p>Todays filtered selection</p>
+{#each resultingProducts as p}
+	<label class="flex input preset-outlined-primary-400-600">
+		<div
+			class="flex-none p-2 border-none
+			 preset-outlined-primary-400-600 flex place-items-center">
+			<input type="checkbox" bind:checked={selectedProducts[p.id]} />
+		</div>
+		<div class="flex-auto">
+			<p class="preset-tonal-tertiary w-fit">{p.id}</p>
+			<p>{p.name}</p>
+			{#if p.parent_product_id}
+				<span class="label-text">Parent</span>
+				<div class="input preset-filled-primary-50-950">
+					<p>
+						<span class="preset-tonal-tertiary w-fit">{p.parent_product_id}</span> - {productsById[
+							p.parent_product_id
+						].name}
+					</p>
+				</div>
+			{/if}
+
+			{#if p.id in parentRelations}
+				<span class="label-text">Childs</span>
+				<div class="input preset-filled-secondary-100-900">
+					{#each parentRelations[p.id] as cid}
+						{@const c = productsById[cid]}
+						<p>
+							<span class="preset-tonal-tertiary w-fit">{cid}</span> - {c.name}
+						</p>
+					{/each}
+				</div>
+			{/if}
+		</div>
+	</label>
+{/each}
+
+<hr />
+
 {#if showSelected}
-	Search results
+	Search results kastrull
 	{#each Object.entries(selectedProducts) as [key, selected]}
 		{@const p = productsById[Number(key)]}
 		{#if selected}
@@ -282,16 +421,11 @@
 	{/each}
 {/if}
 
-<hr />
-{#if showParentRelations}
-	Parent relations
-	<pre class="pre">
-	{JSON.stringify(parentRelations, null, 2)}
-</pre>
-{/if}
-
 <style>
 	div {
 		margin: 4px;
+	}
+	#filter-area {
+		background-color: brown;
 	}
 </style>

@@ -16,8 +16,12 @@ Here is the not-flex-div
 	<span class="common-content-mods"> Span inside </span>
 </div>
 
+<div id="filter-area">
+	<table><tbody><tr><td>Tja!</td><td>Yo!</td></tr></tbody></table>
+</div>
+
 <style>
-	:root{
+	:root {
 		--color-shade-1: #e3ff19;
 		--color-shade-2: #9eb211;
 		--color-shade-3: aquamarine;
@@ -59,5 +63,4 @@ Here is the not-flex-div
 	.common-content-mods {
 		background-color: var(--color-shade-2);
 	}
-
 </style>
