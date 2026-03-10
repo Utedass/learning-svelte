@@ -59,13 +59,13 @@
 		isActive: 'ignore',
 		isCumulative: 'ignore'
 	});
+	type ProductFilterKey = (keyof ProductFilter);
 
 	let filterableProps = [
 		{ key: 'hasParent', display: 'Orphaned' },
 		{ key: 'isActive', display: 'Active' },
 		{ key: 'isCumulative', display: 'Cumulative' }
 	];
-	type ProductFilterKey = (typeof filterableProps)[number]['key'];
 
 	let includeAll = $state(false);
 
@@ -242,10 +242,11 @@
 	{#each filterableProps as p}
 		<Listbox
 			{collection}
-			value={productFilter[p.key]}
+			value={[productFilter[p.key as ProductFilterKey]]}
 			onValueChange={(details) => {
+				// if (details.value === undefined) return; // Tydligen inte nödvändigt
 				console.log(JSON.stringify(details));
-				productFilter[p.key] = details.value;
+				productFilter[p.key as ProductFilterKey] = details.value.at(0) as FilterMode;
 			}}>
 			<Listbox.Label>{p.display}</Listbox.Label>
 			<Listbox.Content>
